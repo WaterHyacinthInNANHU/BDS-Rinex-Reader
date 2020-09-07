@@ -19,7 +19,6 @@ extern void settspan(gtime_t ts, gtime_t te) {}
 extern void settime(gtime_t time) {}
 
 
-
 static void dumpobs(obs_t *obs)
 {
 	gtime_t time = { 0 };
@@ -53,6 +52,47 @@ static void dumpnav(nav_t *nav)
 		assert(nav->eph[i].iode == (nav->eph[i].iodc & 0xFF));
 	}
 }
+
+
+static void saveobs(obs_t *obs)
+{
+	gtime_t time = { 0 };
+	int i;
+	char str[64];
+	FILE *fp = fopen("./data/results/obsdata.txt", "a");
+	fprintf(fp, "obs : n=%d\n", obs->n);
+	for (i = 0; i<obs->n; i++) {
+		time2str(obs->data[i].time, str, 3);
+		fprintf(fp, "%s : %2d %2d %13.3f %13.3f %13.3f %13.3f  %d %d\n", str, obs->data[i].sat,
+			obs->data[i].rcv, obs->data[i].L[0], obs->data[i].L[1],
+			obs->data[i].P[0], obs->data[i].P[1], obs->data[i].LLI[0], obs->data[i].LLI[1]);
+
+		assert(1 <= obs->data[i].sat&&obs->data[i].sat <= 32);
+		assert(timediff(obs->data[i].time, time) >= -DTTOL);
+
+		time = obs->data[i].time;
+	}
+	fclose(fp);
+}
+static void savenav(nav_t *nav)
+{
+	int i;
+	char str[64], s1[64], s2[64];
+	FILE *fp = fopen("./data/results/navdata.txt", "a");
+	fprintf(fp, "nav : n=%d\n", nav->n);
+	for (i = 0; i<nav->n; i++) {
+		time2str(nav->eph[i].toe, str, 3);
+		time2str(nav->eph[i].toc, s1, 0);
+		time2str(nav->eph[i].ttr, s2, 0);
+		fprintf(fp, "%s : %2d    %s %s %3d %3d %2d\n", str, nav->eph[i].sat, s1, s2,
+			nav->eph[i].iode, nav->eph[i].iodc, nav->eph[i].svh);
+
+		assert(nav->eph[i].iode == (nav->eph[i].iodc & 0xFF));
+	}
+	fclose(fp);
+}
+
+
 static void dumpsta(sta_t *sta)
 {
 	printf("name    = %s\n", sta->name);
@@ -141,8 +181,8 @@ void beidoutest(void)
 {
 	gtime_t t0 = { 0 }, ts, te;
 	double ep1[] = { 2005, 4, 2, 1, 0, 0 }, ep2[] = { 2005, 4, 2, 2, 0, 0 };
-	char file1[] = "./data/SAVE2020-08-27_16-09-50.20O";
-	char file2[] = "./data/SAVE2020-08-27_16-09-50.20C";
+	char file1[] = "./data/beidou/SAVE2020-08-27_16-09-50.20O";
+	char file2[] = "./data/beidou/SAVE2020-08-27_16-09-50.20C";
 	int n;
 	obs_t obs = { 0 };
 	nav_t nav = { 0 };
@@ -150,8 +190,38 @@ void beidoutest(void)
 
 	ts = epoch2time(ep1);
 	te = epoch2time(ep2);
-	n = readrnxt(file1, 1, ts, te, 0.0, "", &obs, &nav, &sta);
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
 	dumpobs(&obs);
+	//n = readrnx(file2, 1, "", &obs, &nav, &sta);
+	//dumpnav(&nav);
+	//n = readrnxt(file2, 1, ts, te, 0.0, "", &obs, &nav, &sta);
+	//dumpobs(&obs);
+	//free(obs.data); obs.data = NULL; obs.n = obs.nmax = 0;
+	//n = readrnxt(file1, 1, t0, t0, 240.0, "", &obs, &nav, &sta);
+	//printf("\n\nn=%d\n", n);
+	//dumpobs(&obs);
+	free(obs.data);
+
+	printf("%s beidoutest : OK\n", __FILE__);
+}
+
+void GPStest(void)
+{
+	gtime_t t0 = { 0 }, ts, te;
+	double ep1[] = { 2005, 4, 2, 1, 0, 0 }, ep2[] = { 2005, 4, 2, 2, 0, 0 };
+	char file1[] = "./data/GPS/SAVE2020-08-27_17-07-15.20O";
+	char file2[] = "./data/GPS/SAVE2020-08-27_17-07-15.20N";
+	int n;
+	obs_t obs = { 0 };
+	nav_t nav = { 0 };
+	sta_t sta = { "" };
+
+	ts = epoch2time(ep1);
+	te = epoch2time(ep2);
+
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
+	dumpobs(&obs);
+	n = readrnx(file2, 1, "", &obs, &nav, &sta);
 	dumpnav(&nav);
 	//n = readrnxt(file2, 1, ts, te, 0.0, "", &obs, &nav, &sta);
 	//dumpobs(&obs);
@@ -161,13 +231,38 @@ void beidoutest(void)
 	//dumpobs(&obs);
 	free(obs.data);
 
-	printf("%s utset2 : OK\n", __FILE__);
+	printf("%s GPStest : OK\n", __FILE__);
+}
+
+void GPSsave(){
+	gtime_t t0 = { 0 }, ts, te;
+	double ep1[] = { 2005, 4, 2, 1, 0, 0 }, ep2[] = { 2005, 4, 2, 2, 0, 0 };
+	char file1[] = "./data/GPS/SAVE2020-08-27_17-07-15.20O";
+	char file2[] = "./data/GPS/SAVE2020-08-27_17-07-15.20N";
+	int n;
+	obs_t obs = { 0 };
+	nav_t nav = { 0 };
+	sta_t sta = { "" };
+
+	ts = epoch2time(ep1);
+	te = epoch2time(ep2);
+
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
+	saveobs(&obs);
+	printf("%s GPStest :Saving OK\n", __FILE__);
+	n = readrnx(file2, 1, "", &obs, &nav, &sta);
+	savenav(&nav);
+	printf("%s GPStest :Saving OK\n", __FILE__);
+	free(obs.data);
+	printf("%s GPStest : OK\n", __FILE__);
 }
 
 int main(int argc, _TCHAR* argv[])
 {
 	//utest2();
-	beidoutest();
+	//beidoutest();
+	GPStest();
+	//GPSsave();
 	printf("hhh");
 	return 0;
 }
