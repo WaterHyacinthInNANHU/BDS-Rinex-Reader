@@ -1572,7 +1572,7 @@ extern gtime_t gpst2bdt(gtime_t t)
 /* bdt to gpstime --------------------------------------------------------------
 * convert bdt (beidou navigation satellite system time) to gpstime
 * args   : gtime_t t        I   time expressed in bdt
-* return : time expressed in gpstime
+* return : time expressed in gpstime   
 * notes  : see gpst2bdt()
 *-----------------------------------------------------------------------------*/
 extern gtime_t bdt2gpst(gtime_t t)
