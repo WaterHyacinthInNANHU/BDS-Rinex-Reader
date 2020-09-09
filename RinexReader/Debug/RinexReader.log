@@ -1,12 +1,96 @@
-﻿Build started 9/9/2020 5:30:50 PM.
-     1>Project "C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\RinexReader\RinexReader.vcxproj" on node 2 (Build target(s)).
+﻿Build started 9/9/2020 6:45:43 PM.
+     1>Project "C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\RinexReader\RinexReader.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\rtklib /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _WINSOCK_DEPRECATED_NO_WARNINGS /D DLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\RinexReader.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\rtklib /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _WINSOCK_DEPRECATED_NO_WARNINGS /D DLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt RinexReader.cpp
          RinexReader.cpp
-     1>c:\workspace\graduateschool\projects\rinexparser\git\9.7.2020(2)\bds-rinex-reader\rinexreader\rinexreader.cpp(192): warning C4101: 'str' : unreferenced local variable
-     1>c:\workspace\graduateschool\projects\rinexparser\git\9.7.2020(2)\bds-rinex-reader\rinexreader\rinexreader.cpp(249): warning C4101: 'n' : unreferenced local variable
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rinexreader.cpp(192): warning C4101: 'str' : unreferenced local variable
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rinexreader.cpp(249): warning C4101: 'n' : unreferenced local variable
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I.\rtklib /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_WARNINGS /D _WINSOCK_DEPRECATED_NO_WARNINGS /D DLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt rtklib\convgpx.c rtklib\convkml.c rtklib\convrnx.c rtklib\datum.c rtklib\download.c rtklib\ephemeris.c rtklib\geoid.c rtklib\gis.c rtklib\ionex.c rtklib\lambda.c rtklib\options.c rtklib\pntpos.c rtklib\postpos.c rtklib\ppp.c rtklib\ppp_ar.c rtklib\ppp_corr.c rtklib\preceph.c rtklib\qzslex.c rtklib\rcvraw.c rtklib\rcv\binex.c rtklib\rcv\cmr.c rtklib\rcv\crescent.c rtklib\rcv\gw10.c rtklib\rcv\javad.c rtklib\rcv\novatel.c rtklib\rcv\nvs.c rtklib\rcv\rcvlex.c rtklib\rcv\rt17.c rtklib\rcv\septentrio.c rtklib\rcv\skytraq.c rtklib\rcv\ss2.c rtklib\rcv\tersus.c rtklib\rcv\ublox.c rtklib\rinex.c rtklib\rtcm.c rtklib\rtcm2.c rtklib\rtcm3.c rtklib\rtcm3e.c rtklib\rtkcmn.c rtklib\rtkpos.c rtklib\rtksvr.c rtklib\sbas.c rtklib\solution.c rtklib\stream.c rtklib\streamsvr.c rtklib\tides.c rtklib\tle.c
+         tle.c
+         tides.c
+         streamsvr.c
+         stream.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\stream.c(385): warning C4133: 'function' : incompatible types - from 'char [128]' to 'LPCWSTR'
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\stream.c(400): warning C4133: 'function' : incompatible types - from 'char [64]' to 'LPCWSTR'
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\stream.c(775): warning C4101: 'rs' : unreferenced local variable
+         solution.c
+         sbas.c
+         rtksvr.c
+         rtkpos.c
+         rtkcmn.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rtkcmn.c(3178): warning C4133: 'function' : incompatible types - from 'char [1024]' to 'LPCWSTR'
+         rtcm3e.c
+         rtcm3.c
+         rtcm2.c
+         rtcm.c
+         rinex.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rinex.c(218): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+         ublox.c
+         tersus.c
+         ss2.c
+         skytraq.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\skytraq.c(197): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\skytraq.c(319): warning C4244: '=' : conversion from 'unsigned short' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\skytraq.c(326): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         septentrio.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\septentrio.c(369): warning C4244: '=' : conversion from 'int16_t' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\septentrio.c(406): warning C4244: '=' : conversion from 'int16_t' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\septentrio.c(414): warning C4244: '=' : conversion from 'uint16_t' to 'unsigned char', possible loss of data
+         rt17.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\rt17.c(1781): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\rt17.c(1794): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\rt17.c(1804): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\rt17.c(1830): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         Generating Code...
+         Compiling...
+         rcvlex.c
+         nvs.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\nvs.c(105): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\nvs.c(267): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+         novatel.c
+         javad.c
+         gw10.c
+         crescent.c
+         cmr.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\cmr.c(2439): warning C4244: '=' : conversion from 'double' to 'time_t', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\cmr.c(2556): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\cmr.c(2557): warning C4244: '=' : conversion from 'double' to 'unsigned char', possible loss of data
+         binex.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\binex.c(1095): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\rcv\binex.c(1120): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         rcvraw.c
+         qzslex.c
+         preceph.c
+         ppp_corr.c
+         ppp_ar.c
+         ppp.c
+         postpos.c
+         pntpos.c
+         options.c
+         lambda.c
+         ionex.c
+         gis.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\gis.c(312): warning C4101: 'q' : unreferenced local variable
+         Generating Code...
+         Compiling...
+         geoid.c
+         ephemeris.c
+         download.c
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(130): warning C4133: 'function' : incompatible types - from 'const char *' to 'LPCWSTR'
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(284): warning C4133: 'function' : incompatible types - from 'char [1024]' to 'LPCWSTR'
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(290): warning C4133: 'function' : incompatible types - from 'const char *' to 'LPCWSTR'
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(320): warning C4101: 'stat' : unreferenced local variable
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(503): warning C4101: 'remot_p' : unreferenced local variable
+     1>c:\workspace\graduateschool\projects\rinexparser\bds-rinex-reader\rinexreader\rtklib\download.c(774): warning C4101: 'tow' : unreferenced local variable
+         datum.c
+         convrnx.c
+         convkml.c
+         convgpx.c
+         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\Debug\RinexReader.exe" /INCREMENTAL /NOLOGO winmm.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\Debug\RinexReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\Debug\RinexReader.lib" /MACHINE:X86 Debug\RinexReader.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\Debug\RinexReader.exe" /INCREMENTAL /NOLOGO winmm.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\Debug\RinexReader.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\Debug\RinexReader.lib" /MACHINE:X86 Debug\RinexReader.obj
          Debug\convgpx.obj
          Debug\convkml.obj
          Debug\convrnx.obj
@@ -55,9 +139,9 @@
          Debug\tides.obj
          Debug\tle.obj
          Debug\stdafx.obj
-         RinexReader.vcxproj -> C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\Debug\RinexReader.exe
-     1>Done Building Project "C:\workspace\GraduateSchool\projects\RinexParser\git\9.7.2020(2)\BDS-Rinex-Reader\RinexReader\RinexReader.vcxproj" (Build target(s)).
+         RinexReader.vcxproj -> C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\Debug\RinexReader.exe
+     1>Done Building Project "C:\workspace\GraduateSchool\projects\RinexParser\BDS-Rinex-Reader\RinexReader\RinexReader.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.45
+Time Elapsed 00:00:27.18
