@@ -424,7 +424,7 @@ static eph_t *seleph(gtime_t time, int sat, int iode, const nav_t *nav)
     }
     tmin=tmax+1.0;
     
-    for (i=0;i<nav->n;i++) {
+    for (i=0;i<nav->n;i++) {							//filter out the invaild ephememeris
         if (nav->eph[i].sat!=sat) continue;
         if (iode>=0&&nav->eph[i].iode!=iode) continue;
         if (sys==SYS_GAL&&sel) {
@@ -524,7 +524,7 @@ static int ephpos(gtime_t time, gtime_t teph, int sat, const nav_t *nav,
     
     trace(4,"ephpos  : time=%s sat=%2d iode=%d\n",time_str(time,3),sat,iode);
     
-    sys=satsys(sat,NULL);
+    sys=satsys(sat,NULL); //infer sys via sat number
     
     *svh=-1;
     

@@ -32,8 +32,8 @@ static void dumpobs(obs_t *obs)
 			obs->data[i].rcv, obs->data[i].L[0], obs->data[i].L[1],
 			obs->data[i].P[0], obs->data[i].P[1], obs->data[i].LLI[0], obs->data[i].LLI[1]);
 
-		assert(1 <= obs->data[i].sat && obs->data[i].sat <= 32);
-		assert(timediff(obs->data[i].time, time) >= -DTTOL);
+		//assert(1 <= obs->data[i].sat && obs->data[i].sat <= 32);
+		//assert(timediff(obs->data[i].time, time) >= -DTTOL);
 
 		time = obs->data[i].time;
 	}
@@ -51,7 +51,7 @@ static void dumpnav(nav_t *nav)
 		printf("%s : %2d    %s %s %3d %3d %2d\n", str, nav->eph[i].sat, s1, s2,
 			nav->eph[i].iode, nav->eph[i].iodc, nav->eph[i].svh);
 
-		assert(nav->eph[i].iode == (nav->eph[i].iodc & 0xFF));
+		//assert(nav->eph[i].iode == (nav->eph[i].iodc & 0xFF));
 	}
 }
 static void dumpsta(sta_t *sta)
@@ -311,8 +311,8 @@ void beidoutest(void)
 
 	ts = epoch2time(ep1);
 	te = epoch2time(ep2);
-	//n = readrnx(file1, 1, "", &obs, &nav, &sta);
-	//dumpobs(&obs);
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
+	dumpobs(&obs);
 	n = readrnx(file2, 1, "", &obs, &nav, &sta);
 	dumpnav(&nav);
 	//n = readrnxt(file2, 1, ts, te, 0.0, "", &obs, &nav, &sta);
@@ -394,12 +394,13 @@ void GPSsave(){
 
 
 //spp test
+//return the number of lines of valid obs record (n); save the number of first line in i
 static int nextobsf(const obs_t *obs, int *i, int rcv)
 {
 	double tt;
 	int n;
 	
-	for (; *i < obs->n; (*i)++)//跳转到下一个接收机数量满足要求的记录
+	for (; *i < obs->n; (*i)++)//跳转到下一个接收机数量=rcv的记录
 		if (obs->data[*i].rcv == rcv)
 			break;
 	for (n = 0; *i + n < obs->n; n++)
@@ -410,7 +411,7 @@ static int nextobsf(const obs_t *obs, int *i, int rcv)
 	}
 	return n;
 }
-void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt)
+void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 {
 	gtime_t time = { 0 };
 	sol_t sol;
@@ -436,7 +437,6 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt)
 		int ret = pntpos(&obs->data[i], m, nav, opt, &sol, NULL, NULL, msg);
 		if (ret == 1)//1：OK, 0: error
 		{
-			double ep[6] = { 0 };
 			time2epoch(sol.time, ep);
 			printf("%.0lf,%.0lf,%.0lf,%.0lf,%.0lf,%.0lf,%lf,%lf,%lf,%lf,%lf,%lf,\n", ep[0], ep[1], ep[2], ep[3], ep[4], ep[5],
 				sol.rr[0], sol.rr[1], sol.rr[2], sol.rr[3], sol.rr[4], sol.rr[5]);
@@ -448,8 +448,11 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt)
 	}
 }
 void pntpos_test(){
+	//char file1[] = "./data/GPS/daej229a15.20o";
+	//char file2[] = "./data/GPS/daej229a15.20n";
 	char file1[] = "./data/GPS/SAVE2020-08-27_15-43-55.20O";
 	char file2[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
+	double ep[] = { 2020, 8, 27, 8, 0, 0 };
 	int n;
 	obs_t obs = { 0 };
 	nav_t nav = { 0 };
@@ -459,35 +462,22 @@ void pntpos_test(){
 	n = readrnx(file2, 1, "", &obs, &nav, &sta);
 
 	prcopt_t opt = prcopt_default;
-	pntpos_process(&obs, &nav, &opt);
+	pntpos_process(&obs, &nav, &opt, ep);
 	free(obs.data);
 }
 
 
-//int main(int argc, _TCHAR* argv[])
-//{
-//	printf("start...\n");
-//	//utest2();
-//	//beidoutest();
-//	//beidousave();
-//	//GPStest();
-//	//GPSsave();
-//	pntpos_test();
-//	printf("finished\n");
-//	return 0;
-//}
-
-/* satpos estimation*/
-int main(int argc, char**argv)
-{
-	//char file[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
-	char file[] = "./data/GPS/daej229a00.20n";
+//satpos test
+void GPSsatpostest(){
+	char file[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
+	double ep[] = { 2020, 8, 27, 8, 0, 0 };
 	nav_t nav = { 0 };
-	double ep[] = { 2020, 8, 16, 0, 0, 0 };
 	double rs[6] = { 0 }, dts[2] = { 0 };
 	double var;
 	gtime_t t, time;
 	int svh = 0;
+
+	printf("\nGPSsatpostest \nnavigation file : %s \n", file);
 
 	time = epoch2time(ep);
 	readrnx(file, 1, "", NULL, &nav, NULL);
@@ -495,24 +485,60 @@ int main(int argc, char**argv)
 	traceopen("satpos.trace");
 	tracelevel(3);
 
-	for (int i = 0; i < 3600; i += 30)
+	for (int sat = 0; sat < MAXPRNGPS; sat++)
 	{
-		t = timeadd(time, (double)i);
-		double epoch[6] = { 0 };
-		time2epoch(t, epoch);
-		printf("%lf,%lf,%lf,%lf,%lf,%lf\n", epoch[0], epoch[1], epoch[2], epoch[3], epoch[4], epoch[5]);
-
-		for (int sat = 0; sat < MAXPRNGPS; sat++)
+		int ret = satpos(time, time, sat, EPHOPT_BRDC, &nav, rs, dts, &var, &svh);
+		if (ret)//1:OK; 0:error
 		{
-			int ret = satpos(t, t, sat, EPHOPT_BRDC, &nav, rs, dts, &var, &svh);
-			if (ret)//1:OK; 0:error
-			{
-				printf("%02d %6d %14.3f %14.3f %14.3f %14.3f\n",
-					sat, i, rs[0], rs[1], rs[2], dts[0] * 1E9);
-			}
+			printf("%02d %14.3f %14.3f %14.3f %14.3f\n",
+				sat, rs[0], rs[1], rs[2], dts[0] * 1E9);
 		}
-
 	}
 	traceclose();
+}
+
+void beidousatpostest(){
+	char file[] = "./data/beidou/SAVE2020-08-27_16-09-50.20C";
+	double ep[] = { 2020, 8, 27, 7, 0, 0 };
+	nav_t nav = { 0 };
+	double rs[6] = { 0 }, dts[2] = { 0 };
+	double var;
+	gtime_t t, time;
+	int svh = 0;
+
+	printf("\nbeidousatpostest \nnavigation file : %s \n", file);
+
+	time = epoch2time(ep);
+	readrnx(file, 1, "", NULL, &nav, NULL);
+
+	traceopen("satpos.trace");
+	tracelevel(3);
+
+	for (int sat = MAXPRNGPS + MAXPRNGLO + MAXPRNQZS + MAXPRNGAL + 1; 
+		sat <= MAXPRNGPS + MAXPRNGLO + MAXPRNQZS + MAXPRNGAL + MAXPRNCMP; sat++)
+	{
+		int ret = satpos(time, time, sat, EPHOPT_BRDC, &nav, rs, dts, &var, &svh);
+		if (ret)//1:OK; 0:error
+		{
+			printf("%02d %e %e %e %e\n",
+				sat, rs[0], rs[1], rs[2], dts[0] * 1E9);
+		}
+	}
+	traceclose();
+}
+
+
+int main(int argc, _TCHAR* argv[])
+{
+	printf("start...\n");
+	//utest2();
+	//beidoutest();
+	//beidousave();
+	//GPStest();
+	//GPSsave();
+	//pntpos_test();
+	GPSsatpostest();
+	beidousatpostest();
+	printf("finished\n");
 	return 0;
 }

@@ -1104,7 +1104,7 @@ extern int lsq(const double *A, const double *y, int n, int m, double *x,
 *
 *   K=P*H*(H'*P*H+R)^-1, xp=x+K*v, Pp=(I-K*H')*P
 *
-* args   : double *x        I   states vector (n x 1)
+* args   : double *x        I   states vector                                    (n x 1)
 *          double *P        I   covariance matrix of states (n x n)
 *          double *H        I   transpose of design matrix (n x m)
 *          double *v        I   innovation (measurement - model) (m x 1)

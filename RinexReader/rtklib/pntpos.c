@@ -24,7 +24,8 @@
 
 #define SQR(x)      ((x)*(x))
 
-#define NX          (4+3)       /* # of estimated parameters */
+//#define NX          (4+3)       /* number of estimated parameters */
+#define NX          (4)       /* number of estimated parameters */
 
 #define MAXITR      10          /* max number of iteration for point pos */
 #define ERR_ION     5.0         /* ionospheric delay std (m) */
