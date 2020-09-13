@@ -425,14 +425,12 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 	for (i = 0; i < 3; i++)
 		ra[i] = 0.0;
 
-	for (int i = 0; i < NSATGPS; i++)
-	{
-		nav->lam[i][0] = CLIGHT / FREQ1;
-		nav->lam[i][1] = CLIGHT / FREQ2;
-		nav->lam[i][2] = CLIGHT / FREQ5;
+	//set the initial position of reciever
+	for (int i = 0; i < 6; i++){
+		sol.rr[i] = 0;
 	}
 
-	for (int i = 0; (m = nextobsf(obs, &i, rcv)) > 0; i += m)
+	for (i = 0; (m = nextobsf(obs, &i, rcv)) > 0; i += m)
 	{
 		int ret = pntpos(&obs->data[i], m, nav, opt, &sol, NULL, NULL, msg);
 		if (ret == 1)//1：OK, 0: error
@@ -450,8 +448,10 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 void pntpos_test(){
 	//char file1[] = "./data/GPS/daej229a15.20o";
 	//char file2[] = "./data/GPS/daej229a15.20n";
-	char file1[] = "./data/GPS/SAVE2020-08-27_15-43-55.20O";
-	char file2[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
+	//char file1[] = "./data/GPS/SAVE2020-08-27_15-43-55.20O";
+	//char file2[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
+	char file1[] = "./data/beidou/SAVE2020-08-27_16-09-50.20O";
+	char file2[] = "./data/beidou/SAVE2020-08-27_16-09-50.20C";
 	double ep[] = { 2020, 8, 27, 8, 0, 0 };
 	int n;
 	obs_t obs = { 0 };
@@ -461,7 +461,34 @@ void pntpos_test(){
 	n = readrnx(file1, 1, "", &obs, &nav, &sta);
 	n = readrnx(file2, 1, "", &obs, &nav, &sta);
 
-	prcopt_t opt = prcopt_default;
+	prcopt_t opt = {
+		PMODE_SINGLE, 0, 2, SYS_CMP,   /* mode,soltype,nf,navsys */
+		15.0*D2R, { { 0, 0 } },           /* elmin,snrmask */
+		EPHOPT_BRDC, 1, 1, 1,                    /* sateph,modear,glomodear,bdsmodear */
+		5, 0, 10, 1,                   /* maxout,minlock,minfix,armaxiter */
+		0, 0, 0, 0,                    /* estion,esttrop,dynamics,tidecorr */
+		1, 0, 0, 0, 0,                  /* niter,codesmooth,intpref,sbascorr,sbassatsel */
+		0, 0,                        /* rovpos,refpos */
+		{ 100.0, 100.0 },              /* eratio[] */
+		{ 100.0, 0.003, 0.003, 0.0, 1.0 }, /* err[] */
+		{ 30.0, 0.03, 0.3 },            /* std[] */
+		{ 1E-4, 1E-3, 1E-4, 1E-1, 1E-2, 0.0 }, /* prn[] */
+		5E-12,                      /* sclkstab */
+		{ 3.0, 0.9999, 0.25, 0.1, 0.05 }, /* thresar */
+		0.0, 0.0, 0.05,               /* elmaskar,almaskhold,thresslip */
+		30.0, 30.0, 30.0,             /* maxtdif,maxinno,maxgdop */
+		{ 0 }, { 0 }, { 0 },                /* baseline,ru,rb */
+		{ "", "" },                    /* anttype */
+		{ { 0 } }, { { 0 } }, { 0 }             /* antdel,pcv,exsats */
+	};
+
+	for (int i = 0; i < NSATGPS + NSATGLO + NSATGAL + NSATCMP; i++)
+	{
+		nav.lam[i][0] = CLIGHT / FREQ1_CMP;
+		nav.lam[i][1] = CLIGHT / FREQ2_CMP;
+		nav.lam[i][2] = CLIGHT / FREQ3_CMP;
+	}
+
 	pntpos_process(&obs, &nav, &opt, ep);
 	free(obs.data);
 }
@@ -536,9 +563,9 @@ int main(int argc, _TCHAR* argv[])
 	//beidousave();
 	//GPStest();
 	//GPSsave();
-	//pntpos_test();
-	GPSsatpostest();
-	beidousatpostest();
+	pntpos_test();
+	//GPSsatpostest();
+	//beidousatpostest();
 	printf("finished\n");
 	return 0;
 }
