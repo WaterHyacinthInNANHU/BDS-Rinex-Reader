@@ -430,7 +430,7 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 		sol.rr[i] = 0;
 	}
 
-	for (i = 0; (m = nextobsf(obs, &i, rcv)) > 0; i += m)
+	for (int i = 0; (m = nextobsf(obs, &i, rcv)) > 0; i += m)
 	{
 		int ret = pntpos(&obs->data[i], m, nav, opt, &sol, NULL, NULL, msg);
 		if (ret == 1)//1：OK, 0: error

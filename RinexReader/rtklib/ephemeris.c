@@ -1,4 +1,4 @@
-/*------------------------------------------------------------------------------
+﻿/*------------------------------------------------------------------------------
 * ephemeris.c : satellite ephemeris and clock functions
 *
 *          Copyright (C) 2010-2018 by T.TAKASU, All rights reserved.
@@ -225,7 +225,9 @@ extern void eph2pos(gtime_t time, const eph_t *eph, double *rs, double *dts,
     }
     M=eph->M0+(sqrt(mu/(eph->A*eph->A*eph->A))+eph->deln)*tk;
     
-    for (n=0,E=M,Ek=0.0;fabs(E-Ek)>RTOL_KEPLER&&n<MAX_ITER_KEPLER;n++) {
+	//Newton iterative calculation
+	//target equation： E = M + e*sin(E)
+    for (n=0,E=M,Ek=0.0;fabs(E-Ek)>RTOL_KEPLER&&n<MAX_ITER_KEPLER;n++) { 
         Ek=E; E-=(E-eph->e*sin(E)-M)/(1.0-eph->e*cos(E));
     }
     if (n>=MAX_ITER_KEPLER) {
@@ -524,7 +526,7 @@ static int ephpos(gtime_t time, gtime_t teph, int sat, const nav_t *nav,
     
     trace(4,"ephpos  : time=%s sat=%2d iode=%d\n",time_str(time,3),sat,iode);
     
-    sys=satsys(sat,NULL); //infer sys via sat number
+    sys=satsys(sat,NULL); //infer sys via satellite number
     
     *svh=-1;
     
