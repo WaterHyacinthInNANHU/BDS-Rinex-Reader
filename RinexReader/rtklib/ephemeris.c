@@ -226,7 +226,7 @@ extern void eph2pos(gtime_t time, const eph_t *eph, double *rs, double *dts,
     M=eph->M0+(sqrt(mu/(eph->A*eph->A*eph->A))+eph->deln)*tk;
     
 	//Newton iterative calculation
-	//target equation： E = M + e*sin(E)
+	//target equation： E = M + e*sin(E) 
     for (n=0,E=M,Ek=0.0;fabs(E-Ek)>RTOL_KEPLER&&n<MAX_ITER_KEPLER;n++) { 
         Ek=E; E-=(E-eph->e*sin(E)-M)/(1.0-eph->e*cos(E));
     }
