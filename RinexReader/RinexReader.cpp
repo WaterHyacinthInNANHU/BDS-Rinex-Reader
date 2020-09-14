@@ -482,7 +482,7 @@ void pntpos_test(){
 		{ { 0 } }, { { 0 } }, { 0 }             /* antdel,pcv,exsats */
 	};
 
-	for (int i = 0; i < NSATGPS + NSATGLO + NSATGAL + NSATCMP; i++)
+	for (int i = NSATGPS + NSATGLO + NSATGAL; i < NSATGPS + NSATGLO + NSATGAL + NSATCMP; i++)
 	{
 		nav.lam[i][0] = CLIGHT / FREQ1_CMP;
 		nav.lam[i][1] = CLIGHT / FREQ2_CMP;

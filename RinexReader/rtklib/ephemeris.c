@@ -216,16 +216,16 @@ extern void eph2pos(gtime_t time, const eph_t *eph, double *rs, double *dts,
         rs[0]=rs[1]=rs[2]=*dts=*var=0.0;
         return;
     }
-    tk=timediff(time,eph->toe);
+    tk=timediff(time,eph->toe);//correction of tc
     
     switch ((sys=satsys(eph->sat,&prn))) {
         case SYS_GAL: mu=MU_GAL; omge=OMGE_GAL; break;
         case SYS_CMP: mu=MU_CMP; omge=OMGE_CMP; break;
         default:      mu=MU_GPS; omge=OMGE;     break;
     }
-    M=eph->M0+(sqrt(mu/(eph->A*eph->A*eph->A))+eph->deln)*tk;
+    M=eph->M0+(sqrt(mu/(eph->A*eph->A*eph->A))+eph->deln)*tk;//mean anomaly
     
-	//Newton iterative calculation
+	//compute eccentric anomaly E via Newton iterative calculation
 	//target equation： E = M + e*sin(E) 
     for (n=0,E=M,Ek=0.0;fabs(E-Ek)>RTOL_KEPLER&&n<MAX_ITER_KEPLER;n++) { 
         Ek=E; E-=(E-eph->e*sin(E)-M)/(1.0-eph->e*cos(E));
@@ -238,9 +238,11 @@ extern void eph2pos(gtime_t time, const eph_t *eph, double *rs, double *dts,
     
     trace(4,"kepler: sat=%2d e=%8.5f n=%2d del=%10.3e\n",eph->sat,eph->e,n,E-Ek);
     
+	//argument of latitude, radius and inclination
     u=atan2(sqrt(1.0-eph->e*eph->e)*sinE,cosE-eph->e)+eph->omg;
     r=eph->A*(1.0-eph->e*cosE);
     i=eph->i0+eph->idot*tk;
+	//corrections of the argument of latitude, radius and inclination
     sin2u=sin(2.0*u); cos2u=cos(2.0*u);
     u+=eph->cus*sin2u+eph->cuc*cos2u;
     r+=eph->crs*sin2u+eph->crc*cos2u;
