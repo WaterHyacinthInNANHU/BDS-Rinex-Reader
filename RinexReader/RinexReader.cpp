@@ -466,7 +466,7 @@ void pntpos_test(){
 		15.0*D2R, { { 0, 0 } },           /* elmin,snrmask */
 		EPHOPT_BRDC, 1, 1, 1,                    /* sateph,modear,glomodear,bdsmodear */
 		5, 0, 10, 1,                   /* maxout,minlock,minfix,armaxiter */
-		0, 0, 0, 0,                    /* estion,esttrop,dynamics,tidecorr */
+		IONOOPT_BRDC, TROPOPT_SAAS, 0, 0,                    /* ionoopt,tropopt,dynamics,tidecorr */
 		1, 0, 0, 0, 0,                  /* niter,codesmooth,intpref,sbascorr,sbassatsel */
 		0, 0,                        /* rovpos,refpos */
 		{ 100.0, 100.0 },              /* eratio[] */
@@ -482,7 +482,7 @@ void pntpos_test(){
 		{ { 0 } }, { { 0 } }, { 0 }             /* antdel,pcv,exsats */
 	};
 
-	for (int i = NSATGPS + NSATGLO + NSATGAL; i < NSATGPS + NSATGLO + NSATGAL + NSATCMP; i++)
+	for (int i = NSATGPS + NSATGLO + NSATGAL + MINPRNCMP; i <= NSATGPS + NSATGLO + NSATGAL + MAXPRNCMP; i++)
 	{
 		nav.lam[i][0] = CLIGHT / FREQ1_CMP;
 		nav.lam[i][1] = CLIGHT / FREQ2_CMP;
