@@ -1052,7 +1052,7 @@ typedef struct {        /* processing options type */
     int armaxiter;      /* max iteration to resolve ambiguity */
     int ionoopt;        /* ionosphere option (IONOOPT_???) */
     int tropopt;        /* troposphere option (TROPOPT_???) */
-    int dynamics;       /* dynamics model (0:none,1:velociy,2:accel) */
+    int dynamics;       /* x (0:none,1:velociy,2:accel) */
     int tidecorr;       /* earth tide correction (0:off,1:solid,2:solid+otl+pole) */
     int niter;          /* number of filter iteration */
     int codesmooth;     /* code smoothing window size (0:none) */

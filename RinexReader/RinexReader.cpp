@@ -418,12 +418,12 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 	char msg[128];
 
 	dumpopt(opt);
-	int i = 0, j = 0;
-	double ra[6];
+	//int i = 0, j = 0;
+	//double ra[6];
 	int rcv = 1;
 	int n = 0, m = 0;
-	for (i = 0; i < 3; i++)
-		ra[i] = 0.0;
+	//for (i = 0; i < 3; i++)
+	//	ra[i] = 0.0;
 
 	//set the initial position of reciever
 	for (int i = 0; i < 6; i++){
@@ -462,7 +462,7 @@ void pntpos_test(){
 	n = readrnx(file2, 1, "", &obs, &nav, &sta);
 
 	prcopt_t opt = {
-		PMODE_SINGLE, 0, 2, SYS_CMP,   /* mode,soltype,nf,navsys */
+		PMODE_SINGLE, 0, 3, SYS_CMP,   /* mode,soltype,nf,navsys */
 		15.0*D2R, { { 0, 0 } },           /* elmin,snrmask */
 		EPHOPT_BRDC, 1, 1, 1,                    /* sateph,modear,glomodear,bdsmodear */
 		5, 0, 10, 1,                   /* maxout,minlock,minfix,armaxiter */
