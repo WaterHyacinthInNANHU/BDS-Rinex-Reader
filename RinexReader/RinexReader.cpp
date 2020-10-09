@@ -390,7 +390,19 @@ void GPSsave(){
 	free(obs.data);
 	printf("%s GPSsave : OK\n", __FILE__);
 }
+void MixedNavSave(){
+	char file1[] = "./data/brdm1900.20p";
+	int n;
+	obs_t obs = { 0 };
+	nav_t nav = { 0 };
+	sta_t sta = { "" };
 
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
+	savenav(&nav);
+	printf("%s GPSsave :Saving OK\n", __FILE__);
+	free(obs.data);
+	printf("%s GPSsave : OK\n", __FILE__);
+}
 
 
 //spp test
@@ -411,7 +423,7 @@ static int nextobsf(const obs_t *obs, int *i, int rcv)
 	}
 	return n;
 }
-void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
+void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt)
 {
 	gtime_t time = { 0 };
 	sol_t sol;
@@ -435,8 +447,8 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 		int ret = pntpos(&obs->data[i], m, nav, opt, &sol, NULL, NULL, msg);
 		if (ret == 1)//1：OK, 0: error
 		{
-			time2epoch(sol.time, ep);
-			printf("%.0lf,%.0lf,%.0lf,%.0lf,%.0lf,%.0lf,%lf,%lf,%lf,%lf,%lf,%lf,\n", ep[0], ep[1], ep[2], ep[3], ep[4], ep[5],
+			//time2epoch(sol.time, ep);
+			printf("%lf,%lf,%lf,%lf,%lf,%lf,\n",
 				sol.rr[0], sol.rr[1], sol.rr[2], sol.rr[3], sol.rr[4], sol.rr[5]);
 		}
 		else
@@ -445,14 +457,16 @@ void pntpos_process(obs_t *obs, nav_t *nav, prcopt_t *opt, double *ep)
 		}
 	}
 }
-void pntpos_test(){
+void pntpos_test_BDS(){
 	//char file1[] = "./data/GPS/daej229a15.20o";
 	//char file2[] = "./data/GPS/daej229a15.20n";
 	//char file1[] = "./data/GPS/SAVE2020-08-27_15-43-55.20O";
 	//char file2[] = "./data/GPS/SAVE2020-08-27_15-43-55.20N";
-	char file1[] = "./data/beidou/SAVE2020-08-27_16-09-50.20O";
-	char file2[] = "./data/beidou/SAVE2020-08-27_16-09-50.20C";
-	double ep[] = { 2020, 8, 27, 8, 0, 0 };
+	//char file1[] = "./data/beidou/SAVE2020-08-27_16-09-50.20O";
+	//char file2[] = "./data/beidou/SAVE2020-08-27_16-09-50.20C";
+	char file1[] = "./data/CORS data/hkoh/HKOH00HKG_R_20202750000_01D_30S_MO.rnx";
+	char file2[] = "./data/CORS data/hkoh/HKOH00HKG_R_20202750000_01D_CN.rnx";
+	//double ep[] = { 2020, 8, 27, 8, 0, 0 };
 	int n;
 	obs_t obs = { 0 };
 	nav_t nav = { 0 };
@@ -489,7 +503,50 @@ void pntpos_test(){
 		nav.lam[i][2] = CLIGHT / FREQ3_CMP;
 	}
 
-	pntpos_process(&obs, &nav, &opt, ep);
+	pntpos_process(&obs, &nav, &opt);
+	free(obs.data);
+}
+
+void pntpos_test_GPS(){
+	char file1[] = "./data/CORS data/frdn/frdn275/frdn2750.20o";
+	char file2[] = "./data/CORS data/frdn/frdn275/frdn2750.20n";
+	int n;
+	obs_t obs = { 0 };
+	nav_t nav = { 0 };
+	sta_t sta = { "" };
+
+	n = readrnx(file1, 1, "", &obs, &nav, &sta);
+	n = readrnx(file2, 1, "", &obs, &nav, &sta);
+
+	prcopt_t opt = { /* defaults processing options */
+		PMODE_SINGLE, 0, 2, SYS_GPS,   /* mode,soltype,nf,navsys */
+		15.0*D2R, { { 0, 0 } },           /* elmin,snrmask */
+		0, 1, 1, 1,                    /* sateph,modear,glomodear,bdsmodear */
+		5, 0, 10, 1,                   /* maxout,minlock,minfix,armaxiter */
+		0, 0, 0, 0,                    /* estion,esttrop,dynamics,tidecorr */
+		1, 0, 0, 0, 0,                  /* niter,codesmooth,intpref,sbascorr,sbassatsel */
+		0, 0,                        /* rovpos,refpos */
+		{ 100.0, 100.0 },              /* eratio[] */
+		{ 100.0, 0.003, 0.003, 0.0, 1.0 }, /* err[] */
+		{ 30.0, 0.03, 0.3 },            /* std[] */
+		{ 1E-4, 1E-3, 1E-4, 1E-1, 1E-2, 0.0 }, /* prn[] */
+		5E-12,                      /* sclkstab */
+		{ 3.0, 0.9999, 0.25, 0.1, 0.05 }, /* thresar */
+		0.0, 0.0, 0.05,               /* elmaskar,almaskhold,thresslip */
+		30.0, 30.0, 30.0,             /* maxtdif,maxinno,maxgdop */
+		{ 0 }, { 0 }, { 0 },                /* baseline,ru,rb */
+		{ "", "" },                    /* anttype */
+		{ { 0 } }, { { 0 } }, { 0 }             /* antdel,pcv,exsats */
+	};
+
+	for (int i = 0; i < NSATGPS; i++)
+	{
+		nav.lam[i][0] = CLIGHT / FREQ1;
+		nav.lam[i][1] = CLIGHT / FREQ2;
+		nav.lam[i][2] = CLIGHT / FREQ5;
+	}
+
+	pntpos_process(&obs, &nav, &opt);
 	free(obs.data);
 }
 
@@ -563,7 +620,9 @@ int main(int argc, _TCHAR* argv[])
 	//beidousave();
 	//GPStest();
 	//GPSsave();
-	pntpos_test();
+	//MixedNavSave();
+	pntpos_test_BDS();
+	//pntpos_test_GPS();
 	//GPSsatpostest();
 	//beidousatpostest();
 	printf("finished\n");
