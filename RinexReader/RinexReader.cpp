@@ -480,7 +480,7 @@ void pntpos_test_BDS(){
 		15.0*D2R, { { 0, 0 } },           /* elmin,snrmask */
 		EPHOPT_BRDC, 1, 1, 1,                    /* sateph,modear,glomodear,bdsmodear */
 		5, 0, 10, 1,                   /* maxout,minlock,minfix,armaxiter */
-		IONOOPT_BRDC, TROPOPT_SAAS, 0, 0,                    /* ionoopt,tropopt,dynamics,tidecorr */
+		IONOOPT_IFLC, TROPOPT_SAAS, 0, 0,                    /* ionoopt,tropopt,dynamics,tidecorr */
 		1, 0, 0, 0, 0,                  /* niter,codesmooth,intpref,sbascorr,sbassatsel */
 		0, 0,                        /* rovpos,refpos */
 		{ 100.0, 100.0 },              /* eratio[] */

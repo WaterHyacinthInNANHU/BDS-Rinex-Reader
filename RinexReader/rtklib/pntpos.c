@@ -54,6 +54,27 @@ static double gettgd(int sat, const nav_t *nav)
     }
     return 0.0;
 }
+/*-added by XHY (beidou BGD corrections)*/
+static double getbgd1(int sat, const nav_t *nav)
+{
+	int i;
+	for (i = 0; i<nav->n; i++) {
+		if (nav->eph[i].sat != sat) continue;
+		return CLIGHT*nav->eph[i].tgd[0];
+	}
+	return 0.0;
+}
+static double getbgd2(int sat, const nav_t *nav)
+{
+	int i;
+	for (i = 0; i<nav->n; i++) {
+		if (nav->eph[i].sat != sat) continue;
+		return CLIGHT*nav->eph[i].tgd[1];
+	}
+	return 0.0;
+}
+/*added by XHY-*/
+
 /* psendorange with code bias correction -------------------------------------带代码偏差校正的伪距*/
 static double prange(const obsd_t *obs, const nav_t *nav, const double *azel,
                      int iter, const prcopt_t *opt, double *var)
@@ -100,7 +121,14 @@ static double prange(const obsd_t *obs, const nav_t *nav, const double *azel,
         if (obs->code[j]==CODE_L2C) P2+=P2_C2; /* C2->P2 */
         
         /* iono-free combination */
-        PC=(gamma*P1-P2)/(gamma-1.0);
+		/*-added by XHY(beidou BGD corrections)*/
+		if (sys&SYS_CMP){ 
+			PC = (gamma*(P1 - getbgd1(obs->sat, nav)) - (P2 - getbgd2(obs->sat, nav))) / (gamma - 1.0);
+		}
+		/*added by XHY-*/
+		else{
+			PC=(gamma*P1-P2)/(gamma-1.0);
+		}
     }
     else { /* single-frequency */
         
